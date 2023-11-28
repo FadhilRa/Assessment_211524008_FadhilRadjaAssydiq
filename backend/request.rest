@@ -1,0 +1,13 @@
+GET http://localhost:5000/barang
+
+###
+POST http://localhost:5000/barang
+Content-Type: application/json
+
+{
+    "kodeBarang": "BRG-001",
+    "namaBarang": "Jus Buah",
+    "satuan": "Pcs",
+    "hargaSatuan": 15000,
+    "stok": 10
+}
