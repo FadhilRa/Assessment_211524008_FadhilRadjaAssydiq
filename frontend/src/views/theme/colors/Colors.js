@@ -24,6 +24,24 @@ const Colors = () => {
     }
   };
 
+  const openEditModal = (id) => {
+    // Temukan data barang yang akan diedit berdasarkan ID
+    const editingKasir = barang.find((item) => item.id === id);
+
+    // Set nilai form dengan data barang yang akan diedit
+    setNewKasir({
+      kodeKasir: editingKasir.kodeKasir,
+      nama: editingKasir.nama,
+      wa: editingKasir.wa,
+    });
+
+    // Set ID barang yang akan diedit
+    setEditingKasirId(id);
+
+    // Buka modal
+    setModalOpen(true);
+  };
+
   const handleModalOpen = () => {
     // Bersihkan form jika sedang tidak dalam mode editing
     setNewKasir({
