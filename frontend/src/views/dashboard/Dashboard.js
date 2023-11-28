@@ -35,14 +35,14 @@ const Dashboard = () => {
     }
   }
 
-  const deleteBarang = async () => {
+  const deleteBarang = async (id) => {
     try {
-      const response = await axios.delete('http://localhost:5000/barang/${:id}')
-      setBarang(response.data)
+      await axios.delete(`http://localhost:5000/barang/${id}`);
+      getListBarang();
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error deleting barang:', error);
     }
-  }
+  };
 
   const handleModalOpen = () => {
     setModalOpen(true)
@@ -80,8 +80,97 @@ const Dashboard = () => {
         </button>
 
         {/* Modal Bootstrap */}
-        {/* ... (kode modal sebelumnya) */}
-        {/* Akhir Modal Bootstrap */}
+        <div
+            className={`modal fade ${modalOpen ? 'show' : ''}`}
+            tabIndex="-1"
+            style={{ display: modalOpen ? 'block' : 'none' }}
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Tambah Barang</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={handleModalClose}
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <form>
+                    <label className="mx-2">
+                      Kode Barang:
+                      <input
+                        type="text"
+                        name="kodeBarang"
+                        value={newBarang.kodeBarang}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                    <label className="mx-2">
+                      Nama Barang:
+                      <input
+                        type="text"
+                        name="namaBarang"
+                        value={newBarang.namaBarang}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                    <label className="mx-2">
+                      Satuan:
+                      <input
+                        type="text"
+                        name="satuan"
+                        value={newBarang.satuan}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                    <label className="mx-2">
+                      Harga Satuan:
+                      <input
+                        type="number"
+                        name="hargaSatuan"
+                        value={newBarang.hargaSatuan}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                    <label className="mx-2">
+                      Stok:
+                      <input
+                        type="number"
+                        name="stok"
+                        value={newBarang.stok}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                  </form>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleModalClose}
+                  >
+                    Tutup
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleAddBarang}
+                  >
+                    Tambah
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Akhir Modal Bootstrap */}
 
         <div className="card flex-fill my-3">
           <div className="card-body">
@@ -108,13 +197,13 @@ const Dashboard = () => {
                       <td>
                         <button
                           className="btn btn-warning btn-sm me-2"
-                          onClick={() => deleteBarang(barang.id)}
+                          
                         >
                           Edit
                         </button>
                         <button
                           className="btn btn-danger btn-sm"
-                          // Handle fungsi hapus di sini
+                          onClick={() => deleteBarang(item.id)}
                         >
                           Hapus
                         </button>

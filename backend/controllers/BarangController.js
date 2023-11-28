@@ -51,15 +51,19 @@ export const updateBarang = async(req, res) => {
     }
 }
 
-export const deleteBarang = async(req, res) => {
-    try {
-        await Barang.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
-        res.status(200).json( { message: "Barang deleted" } );
-    } catch(error) {
-        console.log(error.message);
-    }
-}
+export const deleteBarang = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Barang.destroy({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json({ message: "Barang deleted" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
