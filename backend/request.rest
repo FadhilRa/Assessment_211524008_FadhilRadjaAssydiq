@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE  http://localhost:5000/barang/BRG-001
+DELETE  http://localhost:5000/barang/1
 
 ###
 GET http://localhost:5000/kasir
