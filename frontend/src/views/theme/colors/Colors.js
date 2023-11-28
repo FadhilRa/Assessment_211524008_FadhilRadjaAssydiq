@@ -85,6 +85,15 @@ const Colors = () => {
     }
   };
 
+  const deleteKasir = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/kasir/${id}`);
+      getListKasir();
+    } catch (error) {
+      console.error('Error deleting kasir:', error);
+    }
+  };
+
   return (
     <>
       <div className="card">
