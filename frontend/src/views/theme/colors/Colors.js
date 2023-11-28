@@ -24,7 +24,49 @@ const Colors = () => {
     }
   };
 
-  
+  const handleModalOpen = () => {
+    // Bersihkan form jika sedang tidak dalam mode editing
+    setNewKasir({
+      kodeKasir: '',
+      nama: '',
+      wa: '',
+    });
+
+    // Bersihkan ID barang yang akan diedit
+    setEditingKasirId(null);
+
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewBarang((prevKasir) => ({ ...prevKasir, [name]: value }));
+  };
+
+  const handleAddOrUpdateKasir = async () => {
+    try {
+      if (editingKasirId) {
+        // Lakukan permintaan HTTP PUT untuk mengupdate barang jika dalam mode editing
+        await axios.put(`http://localhost:5000/kasir/${editingKasirId}`, newKasir);
+      } else {
+        // Lakukan permintaan HTTP POST untuk menambahkan barang jika tidak dalam mode editing
+        await axios.post('http://localhost:5000/kasir', newKasir);
+      }
+
+      // Tutup modal setelah berhasil menambahkan atau mengupdate barang
+      setModalOpen(false);
+
+      // Perbarui daftar barang
+      getListKasir();
+    } catch (error) {
+      console.error('Error adding/updating kasir:', error);
+    }
+  };
+
   return (
     <>
       <div className="card">
