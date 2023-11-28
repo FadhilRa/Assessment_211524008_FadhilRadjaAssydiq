@@ -1,13 +1,50 @@
 GET http://localhost:5000/barang
 
 ###
+GET http://localhost:5000/tenan
+
+###
 POST http://localhost:5000/barang
 Content-Type: application/json
 
 {
-    "kodeBarang": "BRG-001",
-    "namaBarang": "Jus Buah",
-    "satuan": "Pcs",
-    "hargaSatuan": 15000,
-    "stok": 10
+    "kodeBarang": "BRG21152400801",
+    "namaBarang": "Indomie Rasa Fadhil Radja Assydiq",
+    "satuan": "Bungkus",
+    "hargaSatuan": 3000,
+    "stok": 50
 }
+
+###
+POST http://localhost:5000/barang
+Content-Type: application/json
+
+{
+    "kodeBarang": "BRG21152400802",
+    "namaBarang": "Susu Ultra Fadhil Radja Assydiq",
+    "satuan": "Susu Ultra",
+    "hargaSatuan": 5000,
+    "stok": 100
+}
+
+###
+DELETE  http://localhost:5000/barang/BRG-001
+
+###
+GET http://localhost:5000/kasir
+
+###
+GET http://localhost:5000/barangNota
+
+# ###
+# POST http://localhost:5000/kasir
+# Content-Type: application/json
+
+# {
+#     "kodeKasir": "KSR-001",
+#     "nama": "kasir1",
+#     "hp": "09821642"
+# }
+
+# ###
+# DELETE  http://localhost:5000/kasir/KSR-001

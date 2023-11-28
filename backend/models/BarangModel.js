@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import db from '../config/Database.js';
 
-const {DataTypes} = Sequelize;
+const { DataTypes } = Sequelize;
 
 const Barang = db.define('barang', {
     kodeBarang: {
@@ -9,7 +9,7 @@ const Barang = db.define('barang', {
         allowNull: false
     },
     namaBarang: {
-        type: DataTypes.STRING(32),
+        type: DataTypes.STRING(100),
         allowNull: false
     },
     satuan: {
@@ -28,8 +28,8 @@ const Barang = db.define('barang', {
     freezeTableName: true
 });
 
-export  default Barang;
+export default Barang;
 
-(async()=>{
+(async () => {
     await db.sync();
 })();
