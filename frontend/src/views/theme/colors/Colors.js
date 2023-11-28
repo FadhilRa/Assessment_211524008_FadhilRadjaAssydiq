@@ -1,89 +1,153 @@
-import React, { useEffect, useState, createRef } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import { CRow, CCol, CCard, CCardHeader, CCardBody } from '@coreui/react'
-import { rgbToHex } from '@coreui/utils'
-import { DocsLink } from 'src/components'
-
-const ThemeView = () => {
-  const [color, setColor] = useState('rgb(255, 255, 255)')
-  const ref = createRef()
-
-  useEffect(() => {
-    const el = ref.current.parentNode.firstChild
-    const varColor = window.getComputedStyle(el).getPropertyValue('background-color')
-    setColor(varColor)
-  }, [ref])
-
-  return (
-    <table className="table w-100" ref={ref}>
-      <tbody>
-        <tr>
-          <td className="text-body-secondary">HEX:</td>
-          <td className="font-weight-bold">{rgbToHex(color)}</td>
-        </tr>
-        <tr>
-          <td className="text-body-secondary">RGB:</td>
-          <td className="font-weight-bold">{color}</td>
-        </tr>
-      </tbody>
-    </table>
-  )
-}
-
-const ThemeColor = ({ className, children }) => {
-  const classes = classNames(className, 'theme-color w-75 rounded mb-3')
-  return (
-    <CCol xs={12} sm={6} md={4} xl={2} className="mb-4">
-      <div className={classes} style={{ paddingTop: '75%' }}></div>
-      {children}
-      <ThemeView />
-    </CCol>
-  )
-}
-
-ThemeColor.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-}
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Colors = () => {
+  const [kasir, setKasir] = useState([]);
+  const [newKasir, setNewKasir] = useState({
+    kodeKasir: '',
+    nama: '',
+    wa: '',
+  });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingKasirId, setEditingKasirId] = useState(null);
+
+  useEffect(() => {
+    getListKasir();
+  }, []);
+
+  const getListKasir = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/kasir');
+      setKasir(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  
   return (
     <>
-      <CCard className="mb-4">
-        <CCardHeader>
-          Theme colors
-          <DocsLink href="https://coreui.io/docs/utilities/colors/" />
-        </CCardHeader>
-        <CCardBody>
-          <CRow>
-            <ThemeColor className="bg-primary">
-              <h6>Brand Primary Color</h6>
-            </ThemeColor>
-            <ThemeColor className="bg-secondary">
-              <h6>Brand Secondary Color</h6>
-            </ThemeColor>
-            <ThemeColor className="bg-success">
-              <h6>Brand Success Color</h6>
-            </ThemeColor>
-            <ThemeColor className="bg-danger">
-              <h6>Brand Danger Color</h6>
-            </ThemeColor>
-            <ThemeColor className="bg-warning">
-              <h6>Brand Warning Color</h6>
-            </ThemeColor>
-            <ThemeColor className="bg-info">
-              <h6>Brand Info Color</h6>
-            </ThemeColor>
-            <ThemeColor className="bg-light">
-              <h6>Brand Light Color</h6>
-            </ThemeColor>
-            <ThemeColor className="bg-dark">
-              <h6>Brand Dark Color</h6>
-            </ThemeColor>
-          </CRow>
-        </CCardBody>
-      </CCard>
+      <div className="card">
+        <h3 className="card-header text-center">Kasir</h3>
+        <div className="card-body">
+          <button className="btn btn-primary" onClick={handleModalOpen}>
+            Tambah Kasir
+          </button>
+
+          {/* Modal Bootstrap */}
+          <div
+            className={`modal fade ${modalOpen ? 'show' : ''}`}
+            tabIndex="-1"
+            style={{ display: modalOpen ? 'block' : 'none' }}
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">{editingKasirId ? 'Edit' : 'Tambah'} Kasir</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={handleModalClose}
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <form>
+                    <label className="mx-2">
+                      Kode Kasir:
+                      <input
+                        type="text"
+                        name="kodeKasir"
+                        value={newKasir.kodeKasir}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                    <label className="mx-2">
+                      Nama:
+                      <input
+                        type="text"
+                        name="nama"
+                        value={newKasir.nama}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                    <label className="mx-2">
+                      WA:
+                      <input
+                        type="text"
+                        name="satuan"
+                        value={newKasir.wa}
+                        onChange={handleInputChange}
+                        className="form-control"
+                      />
+                    </label>
+                  </form>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleModalClose}
+                  >
+                    Tutup
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleAddOrUpdateKasir}
+                  >
+                    {editingKasirId ? 'Update' : 'Tambah'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Akhir Modal Bootstrap */}
+
+          <div className="card flex-fill my-3">
+            <div className="card-body">
+              <div className="table-responsive">
+                <table className="table table-hover table-striped text-center border">
+                  <thead>
+                    <tr>
+                      <th>Kode Kasir</th>
+                      <th>Nama</th>
+                      <th>WA</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {kasir.map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.kodeKasir}</td>
+                        <td>{item.nama}</td>
+                        <td>{item.wa}</td>
+                        <td>
+                          <button
+                            className="btn btn-warning btn-sm me-2"
+                            onClick={() => openEditModal(item.id)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => deleteKasir(item.id)}
+                          >
+                            Hapus
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

@@ -13,7 +13,6 @@ export const getBarang = async(req, res) => {
 
 export const createBarang = async (req, res) => {
     try {
-      // Check if the kodeBarang or namaBarang already exists
       const existingBarang = await Barang.findOne({
         where: {
           [Op.or]: [
@@ -24,11 +23,9 @@ export const createBarang = async (req, res) => {
       });
   
       if (existingBarang) {
-        // Kode Barang or Nama Barang already exists; return an error response
         return res.status(400).json({ msg: 'Barang sudah ada' });
       }
   
-      // If not exists, create the Barang
       await Barang.create(req.body);
       res.status(201).json({ msg: 'Barang Ditambahkan' });
     } catch (error) {

@@ -34,6 +34,19 @@ DELETE  http://localhost:5000/barang/1
 GET http://localhost:5000/kasir
 
 ###
+POST http://localhost:5000/kasir
+Content-Type: application/json
+
+{
+    "kodeKasir": "BRG211524008021",
+    "nama": "Susu Ultra Fadhil Radjaa Assydiq",
+    "hp": "Susu Ultra"
+}
+
+###
+DELETE  http://localhost:5000/kasir/1
+
+###
 GET http://localhost:5000/barangNota
 
 # ###
